@@ -17,7 +17,7 @@ int main(int argc, char* argv[]){
 
     if (argc < 3){
         syslog(LOG_WARNING, "Arguments not sufficent");
-        app_return = -1;
+        app_return = 1;
     }
 
     else { 

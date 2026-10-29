@@ -5,6 +5,8 @@
 #include <sys/stat.h>
 #include <syslog.h>
 #include <errno.h>
+#include <unistd.h>
+#include <string.h>
 
 int main(int argc, char* argv[]){
 
@@ -22,16 +24,19 @@ int main(int argc, char* argv[]){
         char* filepath = argv[1];
         char* filecontentstring = argv[2];
     
-        int fd = open(filepath, O_RDWR | O_CREAT | O_TRUNC, 0664);
+        int fd = creat(filepath, 0664);
 
         if (fd == -1){
             perror("Open failed");
             syslog(LOG_WARNING, 
                 "Invalid file descriptor obtained for file");
         }
+        else {
+            syslog(LOG_DEBUG, "Writing %s to %s", 
+                filecontentstring, filepath);
 
-        syslog(LOG_DEBUG, "Writing %s to %s", 
-            filecontentstring, filepath);
+            write(fd, filecontentstring, strlen(filecontentstring));
+        }
 
         app_return = 0;
     }     
